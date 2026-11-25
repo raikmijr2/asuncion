@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f2ec" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#13111a" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Asunción">
+  <title>Asunción</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon-180.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <a id="back" class="icon-btn" href="#/" aria-label="Volver"><span data-icon="back"></span></a>
+      <div id="title" class="top-title">Asunción</div>
+      <a class="icon-btn" href="#/ajustes" aria-label="Ajustes"><span data-icon="gear"></span></a>
+    </header>
+    <main id="view" tabindex="-1"></main>
+  </div>
+
+  <div id="mini" class="mini" hidden>
+    <button id="mini-open" class="mini-info" aria-label="Abrir reproductor">
+      <span class="mini-label">Escuchando</span>
+      <span id="mini-name"></span>
+    </button>
+    <button id="mini-toggle" class="icon-btn round" aria-label="Reproducir o pausar"></button>
+  </div>
+
+  <nav class="tabbar" aria-label="Secciones">
+    <a href="#/" data-tab="home"><span data-icon="home"></span><span>Inicio</span></a>
+    <a href="#/autoconcepto" data-tab="self"><span data-icon="self"></span><span>Autoconcepto</span></a>
+    <a href="#/sos" data-tab="sos"><span data-icon="sos"></span><span>Momento difícil</span></a>
+    <a href="#/historial" data-tab="hist"><span data-icon="hist"></span><span>Historial</span></a>
+  </nav>
+
+  <div id="player" class="player" hidden role="dialog" aria-modal="true" aria-label="Escuchar afirmaciones">
+    <div class="player-inner">
+      <div class="player-top">
+        <button id="p-close" class="icon-btn" aria-label="Minimizar"><span data-icon="down"></span></button>
+        <span id="p-stage" class="eyebrow"></span>
+        <button id="p-stop" class="text-btn">Detener</button>
+      </div>
+
+      <ol id="p-affs" class="p-affs"></ol>
+
+      <div id="p-empty" class="p-empty" hidden>
+        <p>Aún no has añadido la grabación de tus afirmaciones. Mientras tanto, léelas en voz alta despacio y siéntelas.</p>
+        <button id="p-upload" class="pill" data-action="upload"><span data-icon="upload"></span> Subir audio</button>
+      </div>
+
+      <div id="p-controls" hidden>
+        <div id="p-name" class="p-name"></div>
+        <input id="p-seek" type="range" min="0" max="1000" value="0" aria-label="Posición">
+        <div class="p-times"><span id="p-cur">0:00</span><span id="p-dur">0:00</span></div>
+        <div class="p-buttons">
+          <button id="p-prev" class="icon-btn" aria-label="Anterior"><span data-icon="prev"></span></button>
+          <button id="p-play" class="p-big" aria-label="Reproducir"></button>
+          <button id="p-next" class="icon-btn" aria-label="Siguiente"><span data-icon="next"></span></button>
+        </div>
+        <div class="p-options">
+          <button id="p-loop" class="pill"></button>
+          <label class="pill"><span data-icon="timer"></span>
+            <select id="p-timer" aria-label="Temporizador">
+              <option value="0">Sin temporizador</option>
+              <option value="5">5 min</option>
+              <option value="10">10 min</option>
+              <option value="15">15 min</option>
+              <option value="20">20 min</option>
+              <option value="30">30 min</option>
+              <option value="45">45 min</option>
+              <option value="60">1 hora</option>
+            </select>
+          </label>
+          <button id="p-wake" class="pill" aria-pressed="false">☾ Pantalla encendida</button>
+        </div>
+        <div id="p-remaining" class="p-remaining"></div>
+      </div>
+    </div>
+  </div>
+
+  <input id="audio-file" type="file" accept="audio/*" multiple hidden>
+  <input id="import-file" type="file" accept="application/json,.json" hidden>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="exercises.js"></script>
+  <script src="db.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
