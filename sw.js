@@ -1,5 +1,5 @@
 /* Permite abrir la app sin conexión. Los datos están en IndexedDB, no aquí. */
-const CACHE = 'asuncion-v2';
+const CACHE = 'asuncion-v3';
 const ASSETS = ['./', './index.html', './styles.css', './app.js', './db.js', './exercises.js', './manifest.webmanifest', './icon.svg', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (e) => {

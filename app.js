@@ -955,6 +955,15 @@ const Player = {
 let uploadStage = null;
 let recorder = null;
 
+/* Tipo del audio a partir de la extensión (el iPhone a veces no lo indica). null si no se puede reproducir. */
+const AUDIO_TYPES = { mp3: 'audio/mpeg', m4a: 'audio/mp4', mp4: 'audio/mp4', aac: 'audio/aac', wav: 'audio/wav', caf: 'audio/x-caf', webm: 'audio/webm', ogg: 'audio/ogg', opus: 'audio/ogg', oga: 'audio/ogg', flac: 'audio/flac' };
+function audioType(file) {
+  const ext = (file.name.match(/\.([a-z0-9]+)$/i) || [])[1]?.toLowerCase();
+  const type = (ext && AUDIO_TYPES[ext]) || file.type || '';
+  if (!type) return 'audio/mpeg';
+  return Player.a.canPlayType(type) ? type : null;
+}
+
 async function saveAudio(stageId, blob, name) {
   await DB.put('audios', { id: uid(), stageId, name, type: blob.type, blob, createdAt: Date.now() });
 }
@@ -1002,12 +1011,18 @@ $('#audio-file').addEventListener('change', async (e) => {
   e.target.value = '';
   if (!files.length || !uploadStage) return;
   try {
+    let saved = 0;
+    const skipped = [];
     for (const f of files) {
-      const blob = new Blob([await f.arrayBuffer()], { type: f.type || 'audio/mpeg' });
+      const type = audioType(f);
+      if (!type) { skipped.push(f.name); continue; }
+      const blob = new Blob([await f.arrayBuffer()], { type });
       await saveAudio(uploadStage, blob, f.name.replace(/\.[^.]+$/, ''));
+      saved++;
     }
     await Player.refresh(uploadStage);
-    toast(files.length > 1 ? `${files.length} audios guardados` : 'Audio guardado');
+    if (skipped.length) toast(`Este formato no se puede reproducir: ${skipped.join(', ')}. Usa mp3, m4a o wav.`);
+    else toast(saved > 1 ? `${saved} audios guardados` : 'Audio guardado');
   } catch (err) {
     console.error(err);
     toast('No se ha podido guardar el audio.');
